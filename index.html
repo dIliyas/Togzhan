@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokiFrauzent — Тоғжан Алтынбек</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080d18;
+    --bg-panel:#0f1729;
+    --bg-panel-alt:#131f38;
+    --gold:#d8ae5c;
+    --gold-bright:#f2ca82;
+    --rose:#dd8aa0;
+    --rose-bright:#f4b7c6;
+    --rose-deep:#9f5870;
+    --text:#eef0f6;
+    --text-muted:#8b93a9;
+    --text-dim:#5b6479;
+    --green:#7fd9a1;
+    --red:#c76f89;
+    --line:rgba(221,138,160,0.18);
+    --line-soft:rgba(238,240,246,0.08);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Manrope',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4,.display{
+    font-family:'Unbounded',sans-serif;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;position:relative;}
+  section{position:relative;padding:120px 0;border-bottom:1px solid var(--line-soft);}
+  @media (max-width:720px){section{padding:80px 0;} .wrap{padding:0 20px;}}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:fixed;
+    top:0;left:0;right:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px 28px;
+    z-index:50;
+    pointer-events:none;
+  }
+  .topbar > *{pointer-events:auto;}
+  .brandmark{
+    font-family:'Unbounded',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.02em;
+  }
+  .brandmark span{color:var(--rose);}
+  .lang-toggle{
+    display:flex;
+    align-items:center;
+    background:rgba(15,23,41,0.72);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:4px;
+    backdrop-filter:blur(6px);
+  }
+  .lang-toggle button{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    font-weight:600;
+    background:transparent;
+    border:none;
+    color:var(--text-muted);
+    padding:8px 14px;
+    border-radius:100px;
+    cursor:pointer;
+    transition:background .3s, color .3s;
+  }
+  .lang-toggle button.active{
+    background:linear-gradient(135deg,var(--rose-bright),var(--rose));
+    color:#1a0c14;
+  }
+
+  /* ---------- shared bits ---------- */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);
+    margin-bottom:28px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--rose);display:inline-block;}
+  .cta-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    background:linear-gradient(135deg,var(--rose-bright),var(--rose) 55%,var(--gold) 130%);
+    color:#1a0c14;font-family:'Unbounded',sans-serif;font-weight:600;font-size:15px;
+    padding:18px 34px;border-radius:100px;border:none;cursor:pointer;
+    box-shadow:0 10px 34px -8px rgba(221,138,160,0.5);
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -6px rgba(221,138,160,0.65);}
+  .cta-btn:focus-visible{outline:2px solid var(--rose-bright);outline-offset:4px;}
+  .section-title{font-size:clamp(26px,3.6vw,40px);font-weight:700;line-height:1.15;}
+  .section-num{font-family:'JetBrains Mono',monospace;color:var(--text-dim);font-size:13px;letter-spacing:0.12em;}
+
+  /* ---------- HERO ---------- */
+  .hero{min-height:100vh;display:flex;align-items:center;padding-top:140px;padding-bottom:80px;border-bottom:1px solid var(--line-soft);overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;z-index:0;opacity:0.6;pointer-events:none;}
+  .hero-aura{position:absolute;top:-160px;right:-160px;width:620px;height:620px;background:radial-gradient(circle,rgba(221,138,160,0.20),transparent 70%);z-index:0;pointer-events:none;}
+  .hero-inner{position:relative;z-index:1;}
+  .hero h1{font-size:clamp(30px,4.6vw,58px);font-weight:700;line-height:1.18;max-width:920px;}
+  .hero h1 em{font-style:normal;color:var(--rose-bright);}
+  .hero .sub{margin-top:26px;max-width:600px;font-size:18px;line-height:1.6;color:var(--text-muted);}
+  .hero .actions{margin-top:44px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+  .hero-hint{font-size:13px;color:var(--text-dim);}
+
+  .stat-row{margin-top:88px;display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:1px solid var(--line);}
+  .stat{padding:26px 18px 0 0;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:clamp(20px,2.4vw,28px);color:var(--gold-bright);font-weight:600;}
+  .stat span{display:block;margin-top:8px;font-size:12.5px;color:var(--text-muted);line-height:1.4;}
+  @media (max-width:820px){
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .stat{border-right:none;border-bottom:1px solid var(--line);padding:22px 0 22px;}
+    .stat:nth-child(2n){padding-left:18px;}
+  }
+
+  /* ---------- PHILOSOPHY ---------- */
+  .philosophy-quote{max-width:760px;font-size:clamp(22px,3vw,32px);font-weight:600;line-height:1.4;margin-top:26px;}
+  .compare{margin-top:70px;display:flex;flex-direction:column;gap:1px;background:var(--line-soft);border-radius:var(--radius);overflow:hidden;}
+  .compare-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:var(--bg-panel);padding:22px 30px;gap:20px;transition:background .3s;}
+  .compare-row:hover{background:var(--bg-panel-alt);}
+  .compare-row .no,.compare-row .yes{display:flex;align-items:center;gap:14px;font-size:16px;}
+  .compare-row .no{color:var(--text-dim);}
+  .compare-row .yes{color:var(--text);font-weight:600;}
+  .mark{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex:none;}
+  .mark.no{background:rgba(199,111,137,0.14);color:var(--red);}
+  .mark.yes{background:rgba(127,217,161,0.14);color:var(--green);}
+  .arrow-sep{color:var(--rose);font-size:18px;opacity:0.8;}
+  @media (max-width:640px){.compare-row{grid-template-columns:1fr;gap:12px;padding:20px 20px;} .arrow-sep{display:none;}}
+
+  /* ---------- WHO ---------- */
+  .tag-grid{margin-top:64px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .tag-card{border:1px solid var(--line);border-radius:14px;padding:22px 20px;background:var(--bg-panel);font-weight:600;font-size:15px;display:flex;align-items:center;gap:12px;transition:border-color .3s, transform .3s, background .3s;}
+  .tag-card:hover{border-color:var(--rose);transform:translateY(-3px);background:var(--bg-panel-alt);}
+  .tag-card .dot{width:8px;height:8px;border-radius:50%;background:var(--rose);flex:none;}
+  @media (max-width:900px){.tag-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.tag-grid{grid-template-columns:1fr;}}
+
+  /* ---------- PROBLEMS ---------- */
+  .problem-list{margin-top:56px;display:flex;flex-direction:column;}
+  .problem-item{display:flex;gap:20px;padding:22px 0;border-top:1px solid var(--line-soft);align-items:flex-start;}
+  .problem-item:last-child{border-bottom:1px solid var(--line-soft);}
+  .problem-item .idx{font-family:'JetBrains Mono',monospace;color:var(--rose);font-size:14px;padding-top:2px;flex:none;width:34px;}
+  .problem-item p{margin:0;font-size:17px;line-height:1.55;color:var(--text);}
+  .problem-lead{margin-top:56px;font-size:19px;color:var(--text-muted);max-width:640px;}
+  .problem-tail{margin-top:36px;font-size:19px;font-weight:700;color:var(--rose-bright);}
+
+  /* ---------- PRODUCTS / TABS ---------- */
+  .tabs{margin-top:56px;display:flex;flex-wrap:wrap;gap:10px;}
+  .tab-btn{
+    border:1px solid var(--line);background:var(--bg-panel);color:var(--text-muted);
+    font-family:'Unbounded',sans-serif;font-weight:600;font-size:13.5px;
+    padding:14px 22px;border-radius:100px;cursor:pointer;transition:all .3s;
+  }
+  .tab-btn:hover{border-color:var(--rose);color:var(--text);}
+  .tab-btn.active{
+    background:linear-gradient(135deg,var(--rose-bright),var(--rose));
+    color:#1a0c14;border-color:transparent;
+  }
+  .panel{display:none;margin-top:56px;}
+  .panel.active{display:block;animation:fadeUp .5s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);}}
+  .panel h3{font-size:clamp(24px,3.4vw,32px);font-weight:700;margin-bottom:8px;}
+  .funnel{margin:44px auto 0;max-width:980px;}
+  .funnel-stage{margin:0 auto;border:1px solid var(--line);background:var(--bg-panel-alt);border-radius:16px;padding:32px 40px;position:relative;}
+  .funnel-connector{height:44px;display:flex;justify-content:center;align-items:center;}
+  .funnel-connector svg{opacity:0.65;}
+  .funnel-stage .stage-label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--rose);margin-bottom:16px;display:block;}
+  .funnel-stage ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;}
+  .funnel-stage li{font-size:15px;line-height:1.55;color:var(--text-muted);padding-left:18px;position:relative;}
+  .funnel-stage li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--rose);}
+  .stage-1{width:100%;}
+  .stage-2{width:88%;}
+  .stage-3{width:76%;background:linear-gradient(150deg,rgba(221,138,160,0.16),var(--bg-panel-alt));border-color:var(--rose);}
+  .stage-3 li{color:var(--text);}
+  .stage-3 li::before{background:var(--green);}
+  .funnel-note{text-align:center;max-width:560px;margin:60px auto 0;font-size:16px;line-height:1.6;color:var(--text-muted);}
+  .funnel-note strong{color:var(--rose-bright);font-weight:700;}
+  @media (max-width:720px){
+    .funnel-stage,.stage-2,.stage-3{width:100% !important;}
+    .funnel-stage ul{grid-template-columns:1fr;}
+    .funnel-stage{padding:26px 24px;}
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{margin-top:56px;display:grid;grid-template-columns:220px 1fr;gap:56px;align-items:center;}
+  .avatar{
+    width:200px;height:200px;border-radius:28px;
+    background:linear-gradient(150deg,rgba(221,138,160,0.24),var(--bg-panel-alt));
+    border:1px solid var(--rose);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Unbounded',sans-serif;font-weight:700;font-size:44px;color:var(--rose-bright);
+    position:relative;
+  }
+  .avatar::after{
+    content:"";position:absolute;inset:-1px;border-radius:29px;
+    background:radial-gradient(circle at 30% 20%,rgba(244,183,198,0.35),transparent 60%);
+    pointer-events:none;
+  }
+  .about-bio p{font-size:17px;line-height:1.7;color:var(--text-muted);max-width:620px;}
+  .about-name{font-size:20px;font-weight:700;margin-bottom:6px;}
+  .about-role{font-size:13.5px;color:var(--rose);font-family:'JetBrains Mono',monospace;margin-bottom:22px;letter-spacing:0.04em;}
+  .badge-row{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;}
+  .badge{
+    border:1px solid var(--line);border-radius:100px;padding:9px 18px;
+    font-size:13px;font-weight:600;color:var(--text);background:var(--bg-panel);
+  }
+  @media (max-width:720px){
+    .about-grid{grid-template-columns:1fr;text-align:center;}
+    .avatar{margin:0 auto;}
+    .badge-row{justify-content:center;}
+  }
+
+  /* ---------- TRUST ---------- */
+  .trust-grid{margin-top:64px;display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+  .trust-card{border:1px solid var(--line-soft);border-radius:14px;padding:26px 18px;text-align:center;background:var(--bg-panel);transition:border-color .3s, transform .3s;}
+  .trust-card:hover{border-color:var(--rose);transform:translateY(-3px);}
+  .trust-card .num{font-family:'JetBrains Mono',monospace;color:var(--rose);font-size:13px;display:block;margin-bottom:14px;}
+  .trust-card p{margin:0;font-size:14.5px;font-weight:600;line-height:1.4;}
+  @media (max-width:900px){.trust-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.trust-grid{grid-template-columns:1fr;}}
+
+  /* ---------- FINAL ---------- */
+  .final{text-align:center;padding:160px 0 90px;border-bottom:none;overflow:hidden;}
+  .final-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:640px;height:640px;background:radial-gradient(circle,rgba(221,138,160,0.20),transparent 70%);pointer-events:none;}
+  .final h2{position:relative;font-size:clamp(28px,4.4vw,48px);font-weight:700;max-width:820px;margin:0 auto;line-height:1.3;}
+  .final h2 em{font-style:normal;color:var(--rose-bright);}
+  .final .cta-btn{position:relative;margin-top:48px;font-size:17px;padding:20px 44px;}
+
+  .socials{
+    position:relative;margin-top:38px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+  }
+  .social-link{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--line);border-radius:100px;padding:11px 20px;
+    font-size:13.5px;font-weight:600;color:var(--text-muted);
+    transition:border-color .3s, color .3s, transform .3s;
+  }
+  .social-link:hover{border-color:var(--rose);color:var(--rose-bright);transform:translateY(-2px);}
+  .social-link svg{width:16px;height:16px;flex:none;}
+
+  footer{text-align:center;padding:44px 0 48px;font-size:13px;color:var(--text-dim);}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brandmark">TOKI<span>FRAUZENT</span></div>
+  <div class="lang-toggle">
+    <button id="btn-kz" class="active" onclick="setLang('kz')">ҚАЗ</button>
+    <button id="btn-ru" onclick="setLang('ru')">РУС</button>
+  </div>
+</div>
+
+<!-- ============ 1. HERO ============ -->
+<section class="hero">
+  <div class="hero-aura"></div>
+  <div class="hero-bg">
+    <svg width="100%" height="100%" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="fline" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#dd8aa0" stop-opacity="0.55"/>
+          <stop offset="1" stop-color="#dd8aa0" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="M -100 60 L 1300 220" stroke="url(#fline)" stroke-width="1"/>
+      <path d="M -100 160 L 1300 300" stroke="url(#fline)" stroke-width="1"/>
+      <path d="M -100 260 L 900 340 L 1300 380" stroke="url(#fline)" stroke-width="1"/>
+      <circle cx="900" cy="340" r="3" fill="#f4b7c6"/>
+      <path d="M -100 360 L 750 400 L 1300 440" stroke="url(#fline)" stroke-width="1"/>
+      <path d="M -100 460 L 650 430 L 1300 500" stroke="url(#fline)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow" data-i18n="hero.eyebrow">Тоғжан Алтынбек · маркетинг &amp; консультант</div>
+    <h1 data-i18n="hero.h1">Кез келген охватта эксперттерге 1 айда <em>3–5 млн теңгеге</em> дейін запуск жасауға көмектесемін.</h1>
+    <p class="sub" data-i18n="hero.sub">Жеке брендті дамыту, мықты өнім жасау, контент, воронка және запуск жүйесін бірге құрамыз.</p>
+    <div class="actions">
+      <button class="cta-btn" data-i18n="cta" onclick="openWhatsapp()">Разборға жазылу →</button>
+      <span class="hero-hint" data-i18n="hero.hint">Жауап 24 сағат ішінде</span>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><b>5</b><span data-i18n="stat1">жыл маркетинг саласында</span></div>
+      <div class="stat"><b>10+</b><span data-i18n="stat2">экспертпен жұмыс</span></div>
+      <div class="stat"><b>60+</b><span data-i18n="stat3">жеке консультация</span></div>
+      <div class="stat"><b>5М+</b><span data-i18n="stat4">теңге запуск кейстері</span></div>
+      <div class="stat"><b>1М+</b><span data-i18n="stat5">айлық қаралым охваты</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. PHILOSOPHY ============ -->
+<section id="philosophy">
+  <div class="wrap">
+    <span class="section-num">02 / Философия</span>
+    <p class="philosophy-quote" data-i18n="sec2.quote">«Қазір менің мақсатым — эксперттерге жай ғана блог жүргізуді емес, тұрақты сатылым жүйесін құруға көмектесу.»</p>
+
+    <div class="compare">
+      <div class="compare-row">
+        <div class="no"><span class="mark no">✕</span><span data-i18n="cmp1.no">Жай ғана Reels</span></div>
+        <div class="arrow-sep">→</div>
+        <div class="yes"><span class="mark yes">✓</span><span data-i18n="cmp1.yes">Клиент әкелетін контент</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="no"><span class="mark no">✕</span><span data-i18n="cmp2.no">Жай ғана блог</span></div>
+        <div class="arrow-sep">→</div>
+        <div class="yes"><span class="mark yes">✓</span><span data-i18n="cmp2.yes">Жеке бренд</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="no"><span class="mark no">✕</span><span data-i18n="cmp3.no">Жай ғана өнім</span></div>
+        <div class="arrow-sep">→</div>
+        <div class="yes"><span class="mark yes">✓</span><span data-i18n="cmp3.yes">Сатылатын өнім</span></div>
+      </div>
+      <div class="compare-row">
+        <div class="no"><span class="mark no">✕</span><span data-i18n="cmp4.no">Бір реттік запуск</span></div>
+        <div class="arrow-sep">→</div>
+        <div class="yes"><span class="mark yes">✓</span><span data-i18n="cmp4.yes">Тұрақты сатылым жүйесі</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. WHO ============ -->
+<section id="who">
+  <div class="wrap">
+    <span class="section-num">03</span>
+    <h2 class="section-title" style="margin-top:14px;" data-i18n="sec3.title">Кімдермен жұмыс жасаймын?</h2>
+    <div class="tag-grid">
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag1">Эксперттер</span></div>
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag2">Коучтар</span></div>
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag3">Бизнестер</span></div>
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag4">Мобилографтар</span></div>
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag5">SMM мамандар</span></div>
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag6">Фрилансерлер</span></div>
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag7">Продюсерлер</span></div>
+      <div class="tag-card"><span class="dot"></span><span data-i18n="tag8">Онлайнға шыққысы келетін мамандар</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PROBLEMS ============ -->
+<section id="problems">
+  <div class="wrap">
+    <span class="section-num">04</span>
+    <h2 class="section-title" style="margin-top:14px;" data-i18n="sec4.title">Қандай мәселелерді шешемін?</h2>
+    <p class="problem-lead" data-i18n="sec4.lead">Егер сізде:</p>
+    <div class="problem-list">
+      <div class="problem-item"><span class="idx">01</span><p data-i18n="prob1">Өнім бар, бірақ сатылмайды.</p></div>
+      <div class="problem-item"><span class="idx">02</span><p data-i18n="prob2">Қайдан клиент тартуды білмейсіз.</p></div>
+      <div class="problem-item"><span class="idx">03</span><p data-i18n="prob3">Воронка жоқ.</p></div>
+      <div class="problem-item"><span class="idx">04</span><p data-i18n="prob4">Контент сатпайды.</p></div>
+      <div class="problem-item"><span class="idx">05</span><p data-i18n="prob5">Тұрақты табыс жоқ.</p></div>
+      <div class="problem-item"><span class="idx">06</span><p data-i18n="prob6">Жоғары чекке өте алмай жүрсіз.</p></div>
+      <div class="problem-item"><span class="idx">07</span><p data-i18n="prob7">Запуск жасағыңыз келеді, бірақ неден бастау керегін білмейсіз.</p></div>
+      <div class="problem-item"><span class="idx">08</span><p data-i18n="prob8">Команда құрып, масштабқа шыққыңыз келеді.</p></div>
+    </div>
+    <p class="problem-tail" data-i18n="sec4.tail">— онда менің қызметтерім сізге арналған.</p>
+  </div>
+</section>
+
+<!-- ============ 5. PRODUCTS ============ -->
+<section id="product">
+  <div class="wrap">
+    <span class="section-num">05</span>
+    <h2 class="section-title" style="margin-top:14px;" data-i18n="sec5.title">Менің продукттерім</h2>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="1" onclick="setTab(1)" data-i18n="tab1">1,5 айлық наставничество</button>
+      <button class="tab-btn" data-tab="2" onclick="setTab(2)" data-i18n="tab2">Продюсер под ключ</button>
+      <button class="tab-btn" data-tab="3" onclick="setTab(3)" data-i18n="tab3">Продвижение ЛБ</button>
+      <button class="tab-btn" data-tab="4" onclick="setTab(4)" data-i18n="tab4">Жеке консультация</button>
+    </div>
+
+    <!-- PANEL 1 -->
+    <div class="panel active" id="panel-1">
+      <h3 data-i18n="tab1">1,5 айлық наставничество</h3>
+      <div class="funnel">
+        <div class="funnel-stage stage-1">
+          <span class="stage-label" data-i18n="p1.s1.label">Кімдерге арналған?</span>
+          <ul>
+            <li data-i18n="p1.s1.i1">Айына 400К+ теңге табатын, базалық маркетингтен хабары бар мамандарға</li>
+            <li data-i18n="p1.s1.i2">Өз өнімін шығарып, үлкен чекке сатқысы келетіндерге</li>
+            <li data-i18n="p1.s1.i3">Продюсер деңгейіне өтуді қалайтындарға</li>
+            <li data-i18n="p1.s1.i4">Запуск жасап, тұрақты сатылым жүйесін құрғысы келетін эксперттерге</li>
+            <li data-i18n="p1.s1.i5">Команда құрып, масштабқа шығуды мақсат ететіндерге</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-2">
+          <span class="stage-label" data-i18n="p1.s2.label">Форматы және не үйренесіз?</span>
+          <ul>
+            <li data-i18n="p1.s2.i1">1,5 ай жеке жұмыс</li>
+            <li data-i18n="p1.s2.i2">Аптасына 2 Zoom кездесу</li>
+            <li data-i18n="p1.s2.i3">Күнделікті кері байланыс</li>
+            <li data-i18n="p1.s2.i4">Продукт, контент, воронка, прогрев, сатылым жүйесін толық меңгеріп, бірге практикада құрамыз</li>
+            <li data-i18n="p1.s2.i5">Запуск провал болмайтын 100% метод</li>
+            <li data-i18n="p1.s2.i6">Масштабқа шығу, қымбат чекке сату</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-3">
+          <span class="stage-label" data-i18n="p1.s3.label">Нәтижесі</span>
+          <ul>
+            <li data-i18n="p1.s3.i1">Өз жүйеңізді құрасыз</li>
+            <li data-i18n="p1.s3.i2">Бір ғана клиентке тәуелді болмайсыз</li>
+            <li data-i18n="p1.s3.i3">Продюсер деңгейінде ойлай бастайсыз</li>
+            <li data-i18n="p1.s3.i4">Тұрақты сатылым жүйесін қалыптастырасыз</li>
+            <li data-i18n="p1.s3.i5">Табысты бірнеше есе өсіруге мүмкіндік беретін фундамент аласыз</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2 -->
+    <div class="panel" id="panel-2">
+      <h3 data-i18n="tab2">Продюсер под ключ</h3>
+      <div class="funnel">
+        <div class="funnel-stage stage-1">
+          <span class="stage-label" data-i18n="p2.s1.label">Кімдерге арналған?</span>
+          <ul>
+            <li data-i18n="p2.s1.i1">Өзінің мықты эксперті бар, бірақ әлі 5-10 млн+ запуск жасамаған эксперттерге</li>
+            <li data-i18n="p2.s1.i2">Контентке уақыт жұмсағысы келмейтін, жүйені толықтай командаға тапсырғысы келетіндерге</li>
+            <li data-i18n="p2.s1.i3">Өтінімін, блогын және сатылымын келесі деңгейге шығарғысы келетіндерге</li>
+            <li data-i18n="p2.s1.i4">Масштабқа шығуға дайын, бірақ стратегия мен жүйе жетіспейтін эксперттерге</li>
+            <li data-i18n="p2.s1.i5">Нақты кейстері бар, өз саласының мықты практик маманы</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-2">
+          <span class="stage-label" data-i18n="p2.s2.label">Жұмыс форматы</span>
+          <ul>
+            <li data-i18n="p2.s2.i1">Запусктың толық стратегиясын өзім құрамын</li>
+            <li data-i18n="p2.s2.i2">Өнімді жүйелеп күшейтемін</li>
+            <li data-i18n="p2.s2.i3">Контент-жоспар, сценарийлер, прогрев толық дайындалады</li>
+            <li data-i18n="p2.s2.i4">Сату воронкасы мен автоворонка құрылады</li>
+            <li data-i18n="p2.s2.i5">Лид-магнит, презентация, офферлер жасалады</li>
+            <li data-i18n="p2.s2.i6">Командаға тапсырмалар беріліп, бүкіл процесті басқарамын</li>
+            <li data-i18n="p2.s2.i7">Аналитика жүргізіп, запуск барысында стратегияны түзетіп отырамын</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-3">
+          <span class="stage-label" data-i18n="p2.s3.label">Нәтижесі қандай?</span>
+          <ul>
+            <li data-i18n="p2.s3.i1">Дұрыс құрылған запуск жүйесі</li>
+            <li data-i18n="p2.s3.i2">Күшті өнім және жоғары конверсия</li>
+            <li data-i18n="p2.s3.i3">Жүйелендірілген өнім арқылы тұрақты сатылым</li>
+            <li data-i18n="p2.s3.i4">Командамен жұмыс істейтін дайын бизнес-процесс</li>
+            <li data-i18n="p2.s3.i5">Масштабқа шығуға мүмкіндік беретін жүйе</li>
+            <li data-i18n="p2.s3.i6">Қазіргі доходтан кемі 2-3х қылу мүмкіндігі</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 3 -->
+    <div class="panel" id="panel-3">
+      <h3 data-i18n="p3.title">Продвижение ЛБ (жеке бренд)</h3>
+      <div class="funnel">
+        <div class="funnel-stage stage-1">
+          <span class="stage-label" data-i18n="p3.s1.label">Толық қамту (под-ключ)</span>
+          <ul>
+            <li data-i18n="p3.s1.i1">20 сценарий (тартымды, сатылымды, охватты, эксперттік)</li>
+            <li data-i18n="p3.s1.i2">Түсірілім (видеограф)</li>
+            <li data-i18n="p3.s1.i3">Монтаж (кәсіби)</li>
+            <li data-i18n="p3.s1.i4">Студия (кәсіби), 2 рет</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-2">
+          <span class="stage-label" data-i18n="p3.s2.label">Контент форматтары</span>
+          <ul>
+            <li data-i18n="p3.s2.i1">10 охватты</li>
+            <li data-i18n="p3.s2.i2">5 эксперттік</li>
+            <li data-i18n="p3.s2.i3">5 карусель-пост</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-3">
+          <span class="stage-label" data-i18n="p3.s3.label">Мақсат</span>
+          <ul>
+            <li data-i18n="p3.s3.i1">Қамтуды арттыру</li>
+            <li data-i18n="p3.s3.i2">Мақсатты аудиторияны тарту</li>
+            <li data-i18n="p3.s3.i3">Лидтерді сатылымға дайындау</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 4 -->
+    <div class="panel" id="panel-4">
+      <h3 data-i18n="tab4">Жеке консультация</h3>
+      <div class="funnel">
+        <div class="funnel-stage stage-1">
+          <span class="stage-label" data-i18n="p4.s1.label">Кімдерге арналған?</span>
+          <ul>
+            <li data-i18n="p4.s1.i1">Өз өтінімін шығарғысы келетін эксперттерге</li>
+            <li data-i18n="p4.s1.i2">Сатылымы тұрақсыз, бірақ масштабқа шығуды қалайтындарға</li>
+            <li data-i18n="p4.s1.i3">Запуск жасағысы келеді, бірақ неден бастарын білмейтіндерге</li>
+            <li data-i18n="p4.s1.i4">СММ, мобилограф, рилсмейкер болып жүріп, келесі деңгейге шыға алмай жүрген мамандарға</li>
+            <li data-i18n="p4.s1.i5">Бизнесіне дайын маркетинг стратегия алғысы келетіндерге</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-2">
+          <span class="stage-label" data-i18n="p4.s2.label">Консультацияда не жасаймыз?</span>
+          <ul>
+            <li data-i18n="p4.s2.i1">Қазіргі жағдайыңызды толық талдаймын</li>
+            <li data-i18n="p4.s2.i2">Қай жерде ақша жоғалтып жүргеніңізді көрсетемін</li>
+            <li data-i18n="p4.s2.i3">Сіздің нишаңызға сай өнімдер құрастырамыз</li>
+            <li data-i18n="p4.s2.i4">Клиент әкелетін трафик көздерін анықтаймыз</li>
+            <li data-i18n="p4.s2.i5">Контент стратегиясын құрамыз</li>
+            <li data-i18n="p4.s2.i6">Қандай воронка тиімді болатынын көрсетемін</li>
+            <li data-i18n="p4.s2.i7">Прогрев пен сатылым схемасын беремін</li>
+            <li data-i18n="p4.s2.i8">Масштабқа шығудың нақты жол картасын жасаймыз</li>
+          </ul>
+        </div>
+        <div class="funnel-connector"><svg width="80" height="44" viewBox="0 0 80 44"><path d="M40 0 V30 M28 22 L40 34 L52 22" stroke="#dd8aa0" stroke-width="1.6" fill="none"/></svg></div>
+        <div class="funnel-stage stage-3">
+          <span class="stage-label" data-i18n="p4.s3.label">Нәтижесі</span>
+          <ul>
+            <li data-i18n="p4.s3.i1">Не істеу керегін нақты түсінеміз</li>
+            <li data-i18n="p4.s3.i2">Өзіңізге сай стратегиямен шығасыз</li>
+            <li data-i18n="p4.s3.i3">Табысты өсіруге арналған нақты жоспар аласыз</li>
+            <li data-i18n="p4.s3.i4">Консультациядан кейін бірден іске асыратын әрекеттер тізімі болады</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="funnel-note" data-i18n="sec5.note">Бұл жай ғана теория емес. <strong>Біз бірге жасап шығамыз.</strong> Менің мақсатым — сізге ақпарат беру емес, нәтиже шығару.</p>
+  </div>
+</section>
+
+<!-- ============ 6. ABOUT ============ -->
+<section id="about">
+  <div class="wrap">
+    <span class="section-num">06</span>
+    <h2 class="section-title" style="margin-top:14px;" data-i18n="sec6.title">Мен туралы қысқаша</h2>
+
+    <div class="about-grid">
+      <div class="avatar">ТА</div>
+      <div class="about-bio">
+        <div class="about-name">Тоғжан Алтынбек</div>
+        <div class="about-role" data-i18n="about.role">Маркетинг-консультант</div>
+        <p data-i18n="about.bio">Маған 25 жас. Маркетинг саласында 5 жылдан асты жұмыс істеп келемін. Осы жылдар ішінде өз бизнесімді құрдым, тұрақты табыс жүйесін қалыптастырдым және жеке көлігіме қол жеткіздім. Бұл — сандар емес, дәл сол жүйенің нәтижесі, соны мен сізбен бөлісемін.</p>
+        <div class="badge-row">
+          <span class="badge" data-i18n="about.badge1">25 жас</span>
+          <span class="badge" data-i18n="about.badge2">5+ жыл тәжірибе</span>
+          <span class="badge" data-i18n="about.badge3">Меншік бизнес</span>
+          <span class="badge" data-i18n="about.badge4">Жеке көлік</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. TRUST ============ -->
+<section id="trust">
+  <div class="wrap">
+    <span class="section-num">07</span>
+    <h2 class="section-title" style="margin-top:14px;" data-i18n="sec7.title">Неге маған сенеді?</h2>
+    <div class="trust-grid">
+      <div class="trust-card"><span class="num">01</span><p data-i18n="trust1">Теория емес — практика</p></div>
+      <div class="trust-card"><span class="num">02</span><p data-i18n="trust2">Дайын шаблон емес</p></div>
+      <div class="trust-card"><span class="num">03</span><p data-i18n="trust3">Нақты жүйе</p></div>
+      <div class="trust-card"><span class="num">04</span><p data-i18n="trust4">Толық сүйемелдеу</p></div>
+      <div class="trust-card"><span class="num">05</span><p data-i18n="trust5">Нәтижеге бағытталған жұмыс</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. FINAL CTA ============ -->
+<section class="final">
+  <div class="final-glow"></div>
+  <div class="wrap">
+    <h2 data-i18n="final.h2">Егер сіз де тұрақты сатылым жүйесін құрып, <em>масштабқа шыққыңыз келсе</em> — маған жазыңыз.</h2>
+    <button class="cta-btn" data-i18n="cta" onclick="openWhatsapp()">Разборға жазылу →</button>
+
+    <div class="socials">
+      <a class="social-link" href="https://instagram.com/tokifrauzent" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
+        <span>@Tokifrauzent</span>
+      </a>
+      <a class="social-link" href="#" onclick="openWhatsapp();return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.3-1.2L3 20l1.3-5a8.4 8.4 0 0 1-1.2-4.3C3.1 6 6.9 2.2 11.6 2.2c2.1 0 4 .8 5.5 2.1"/></svg>
+        <span>WhatsApp</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer data-i18n="footer">TokiFrauzent · Тоғжан Алтынбек © 2026</footer>
+
+<script>
+  const WHATSAPP_NUMBER = "77073155462"; // TODO: replace with the real WhatsApp number
+  function openWhatsapp(){
+    const msg = { kz: "Сәлем! Разборға жазылғым келеді.", ru: "Здравствуйте! Хочу записаться на разбор." };
+    const text = encodeURIComponent(msg[currentLang] || msg.kz);
+    window.open(`https://wa.me/${77073155462}?text=${text}`, "_blank");
+  }
+
+  function setTab(n){
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === String(n)));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + n));
+  }
+
+  let currentLang = 'kz';
+  const T = {
+    "hero.eyebrow": { kz: `Тоғжан Алтынбек · маркетинг &amp; консультант`, ru: `Тоғжан Алтынбек · маркетинг-консультант` },
+    "hero.h1": { kz: `Кез келген охватта эксперттерге 1 айда <em>3–5 млн теңгеге</em> дейін запуск жасауға көмектесемін.`, ru: `Помогаю экспертам с любым охватом сделать запуск на <em>3–5 млн тенге</em> за 1 месяц.` },
+    "hero.sub": { kz: `Жеке брендті дамыту, мықты өнім жасау, контент, воронка және запуск жүйесін бірге құрамыз.`, ru: `Развиваем личный бренд, создаём сильный продукт, контент, воронку и систему запуска — вместе.` },
+    "cta": { kz: `Разборға жазылу →`, ru: `Записаться на разбор →` },
+    "hero.hint": { kz: `Жауап 24 сағат ішінде`, ru: `Ответ в течение 24 часов` },
+    "stat1": { kz: `жыл маркетинг саласында`, ru: `лет в маркетинге` },
+    "stat2": { kz: `экспертпен жұмыс`, ru: `экспертов в работе` },
+    "stat3": { kz: `жеке консультация`, ru: `личных консультаций` },
+    "stat4": { kz: `теңге запуск кейстері`, ru: `тенге — кейсы запусков` },
+    "stat5": { kz: `айлық қаралым охваты`, ru: `просмотров охвата в месяц` },
+    "sec2.quote": { kz: `«Қазір менің мақсатым — эксперттерге жай ғана блог жүргізуді емес, тұрақты сатылым жүйесін құруға көмектесу.»`, ru: `«Моя цель — не просто вести блог для экспертов, а помогать выстраивать систему постоянных продаж.»` },
+    "cmp1.no": { kz: `Жай ғана Reels`, ru: `Просто Reels` },
+    "cmp1.yes": { kz: `Клиент әкелетін контент`, ru: `Контент, который приводит клиентов` },
+    "cmp2.no": { kz: `Жай ғана блог`, ru: `Просто блог` },
+    "cmp2.yes": { kz: `Жеке бренд`, ru: `Личный бренд` },
+    "cmp3.no": { kz: `Жай ғана өнім`, ru: `Просто продукт` },
+    "cmp3.yes": { kz: `Сатылатын өнім`, ru: `Продукт, который продаётся` },
+    "cmp4.no": { kz: `Бір реттік запуск`, ru: `Разовый запуск` },
+    "cmp4.yes": { kz: `Тұрақты сатылым жүйесі`, ru: `Система постоянных продаж` },
+    "sec3.title": { kz: `Кімдермен жұмыс жасаймын?`, ru: `С кем я работаю?` },
+    "tag1": { kz: `Эксперттер`, ru: `Эксперты` },
+    "tag2": { kz: `Коучтар`, ru: `Коучи` },
+    "tag3": { kz: `Бизнестер`, ru: `Бизнесы` },
+    "tag4": { kz: `Мобилографтар`, ru: `Мобилографы` },
+    "tag5": { kz: `SMM мамандар`, ru: `SMM-специалисты` },
+    "tag6": { kz: `Фрилансерлер`, ru: `Фрилансеры` },
+    "tag7": { kz: `Продюсерлер`, ru: `Продюсеры` },
+    "tag8": { kz: `Онлайнға шыққысы келетін мамандар`, ru: `Специалисты, которые хотят выйти в онлайн` },
+    "sec4.title": { kz: `Қандай мәселелерді шешемін?`, ru: `Какие проблемы я решаю?` },
+    "sec4.lead": { kz: `Егер сізде:`, ru: `Если у вас:` },
+    "prob1": { kz: `Өнім бар, бірақ сатылмайды.`, ru: `Есть продукт, но он не продаётся.` },
+    "prob2": { kz: `Қайдан клиент тартуды білмейсіз.`, ru: `Не знаете, где искать клиентов.` },
+    "prob3": { kz: `Воронка жоқ.`, ru: `Нет воронки.` },
+    "prob4": { kz: `Контент сатпайды.`, ru: `Контент не продаёт.` },
+    "prob5": { kz: `Тұрақты табыс жоқ.`, ru: `Нет стабильного дохода.` },
+    "prob6": { kz: `Жоғары чекке өте алмай жүрсіз.`, ru: `Не можете перейти на высокий чек.` },
+    "prob7": { kz: `Запуск жасағыңыз келеді, бірақ неден бастау керегін білмейсіз.`, ru: `Хотите сделать запуск, но не знаете, с чего начать.` },
+    "prob8": { kz: `Команда құрып, масштабқа шыққыңыз келеді.`, ru: `Хотите собрать команду и выйти на масштаб.` },
+    "sec4.tail": { kz: `— онда менің қызметтерім сізге арналған.`, ru: `— тогда мои услуги для вас.` },
+    "sec5.title": { kz: `Менің продукттерім`, ru: `Мои продукты` },
+    "tab1": { kz: `1,5 айлық наставничество`, ru: `Наставничество 1,5 месяца` },
+    "tab2": { kz: `Продюсер под ключ`, ru: `Продюсер под ключ` },
+    "tab3": { kz: `Продвижение ЛБ`, ru: `Продвижение ЛБ` },
+    "tab4": { kz: `Жеке консультация`, ru: `Личная консультация` },
+    "p1.s1.label": { kz: `Кімдерге арналған?`, ru: `Кому подходит?` },
+    "p1.s1.i1": { kz: `Айына 400К+ теңге табатын, базалық маркетингтен хабары бар мамандарға`, ru: `Специалистам с базовыми знаниями маркетинга, зарабатывающим от 400К+ тенге в месяц` },
+    "p1.s1.i2": { kz: `Өз өнімін шығарып, үлкен чекке сатқысы келетіндерге`, ru: `Тем, кто хочет создать свой продукт и продавать на высокий чек` },
+    "p1.s1.i3": { kz: `Продюсер деңгейіне өтуді қалайтындарға`, ru: `Тем, кто хочет выйти на уровень продюсера` },
+    "p1.s1.i4": { kz: `Запуск жасап, тұрақты сатылым жүйесін құрғысы келетін эксперттерге`, ru: `Экспертам, которые хотят сделать запуск и построить систему постоянных продаж` },
+    "p1.s1.i5": { kz: `Команда құрып, масштабқа шығуды мақсат ететіндерге`, ru: `Тем, кто хочет собрать команду и выйти на масштаб` },
+    "p1.s2.label": { kz: `Форматы және не үйренесіз?`, ru: `Формат и что вы освоите?` },
+    "p1.s2.i1": { kz: `1,5 ай жеке жұмыс`, ru: `1,5 месяца индивидуальной работы` },
+    "p1.s2.i2": { kz: `Аптасына 2 Zoom кездесу`, ru: `2 Zoom-встречи в неделю` },
+    "p1.s2.i3": { kz: `Күнделікті кері байланыс`, ru: `Ежедневная обратная связь` },
+    "p1.s2.i4": { kz: `Продукт, контент, воронка, прогрев, сатылым жүйесін толық меңгеріп, бірге практикада құрамыз`, ru: `Полностью разберём продукт, контент, воронку, прогрев и систему продаж — и построим их вместе на практике` },
+    "p1.s2.i5": { kz: `Запуск провал болмайтын 100% метод`, ru: `Метод запуска без провала — 100%` },
+    "p1.s2.i6": { kz: `Масштабқа шығу, қымбат чекке сату`, ru: `Выход на масштаб, продажи по высокому чеку` },
+    "p1.s3.label": { kz: `Нәтижесі`, ru: `Результат` },
+    "p1.s3.i1": { kz: `Өз жүйеңізді құрасыз`, ru: `Построите собственную систему` },
+    "p1.s3.i2": { kz: `Бір ғана клиентке тәуелді болмайсыз`, ru: `Не будете зависеть от одного клиента` },
+    "p1.s3.i3": { kz: `Продюсер деңгейінде ойлай бастайсыз`, ru: `Начнёте думать на уровне продюсера` },
+    "p1.s3.i4": { kz: `Тұрақты сатылым жүйесін қалыптастырасыз`, ru: `Сформируете систему постоянных продаж` },
+    "p1.s3.i5": { kz: `Табысты бірнеше есе өсіруге мүмкіндік беретін фундамент аласыз`, ru: `Получите фундамент для многократного роста доходов` },
+    "p2.s1.label": { kz: `Кімдерге арналған?`, ru: `Кому подходит?` },
+    "p2.s1.i1": { kz: `Өзінің мықты эксперті бар, бірақ әлі 5-10 млн+ запуск жасамаған эксперттерге`, ru: `Экспертам с сильной экспертностью, которые ещё не делали запуск на 5-10 млн+` },
+    "p2.s1.i2": { kz: `Контентке уақыт жұмсағысы келмейтін, жүйені толықтай командаға тапсырғысы келетіндерге`, ru: `Тем, кто не хочет тратить время на контент и готов полностью передать систему команде` },
+    "p2.s1.i3": { kz: `Өтінімін, блогын және сатылымын келесі деңгейге шығарғысы келетіндерге`, ru: `Тем, кто хочет вывести заявки, блог и продажи на новый уровень` },
+    "p2.s1.i4": { kz: `Масштабқа шығуға дайын, бірақ стратегия мен жүйе жетіспейтін эксперттерге`, ru: `Экспертам, готовым к масштабу, но без стратегии и системы` },
+    "p2.s1.i5": { kz: `Нақты кейстері бар, өз саласының мықты практик маманы`, ru: `Практикам с реальными кейсами, сильным в своей нише` },
+    "p2.s2.label": { kz: `Жұмыс форматы`, ru: `Формат работы` },
+    "p2.s2.i1": { kz: `Запусктың толық стратегиясын өзім құрамын`, ru: `Полную стратегию запуска строю я лично` },
+    "p2.s2.i2": { kz: `Өнімді жүйелеп күшейтемін`, ru: `Системно усиливаю продукт` },
+    "p2.s2.i3": { kz: `Контент-жоспар, сценарийлер, прогрев толық дайындалады`, ru: `Полностью готовим контент-план, сценарии, прогрев` },
+    "p2.s2.i4": { kz: `Сату воронкасы мен автоворонка құрылады`, ru: `Строим воронку продаж и автоворонку` },
+    "p2.s2.i5": { kz: `Лид-магнит, презентация, офферлер жасалады`, ru: `Создаём лид-магнит, презентацию, офферы` },
+    "p2.s2.i6": { kz: `Командаға тапсырмалар беріліп, бүкіл процесті басқарамын`, ru: `Ставлю задачи команде и управляю всем процессом` },
+    "p2.s2.i7": { kz: `Аналитика жүргізіп, запуск барысында стратегияны түзетіп отырамын`, ru: `Веду аналитику и корректирую стратегию по ходу запуска` },
+    "p2.s3.label": { kz: `Нәтижесі қандай?`, ru: `Какой результат?` },
+    "p2.s3.i1": { kz: `Дұрыс құрылған запуск жүйесі`, ru: `Правильно выстроенная система запуска` },
+    "p2.s3.i2": { kz: `Күшті өнім және жоғары конверсия`, ru: `Сильный продукт и высокая конверсия` },
+    "p2.s3.i3": { kz: `Жүйелендірілген өнім арқылы тұрақты сатылым`, ru: `Стабильные продажи благодаря системному продукту` },
+    "p2.s3.i4": { kz: `Командамен жұмыс істейтін дайын бизнес-процесс`, ru: `Готовый бизнес-процесс, работающий с командой` },
+    "p2.s3.i5": { kz: `Масштабқа шығуға мүмкіндік беретін жүйе`, ru: `Система, дающая возможность выйти на масштаб` },
+    "p2.s3.i6": { kz: `Қазіргі доходтан кемі 2-3х қылу мүмкіндігі`, ru: `Возможность увеличить текущий доход минимум в 2-3 раза` },
+    "p3.title": { kz: `Продвижение ЛБ (жеке бренд)`, ru: `Продвижение ЛБ (личный бренд)` },
+    "p3.s1.label": { kz: `Толық қамту (под-ключ)`, ru: `Под ключ` },
+    "p3.s1.i1": { kz: `20 сценарий (тартымды, сатылымды, охватты, эксперттік)`, ru: `20 сценариев (вовлекающие, продающие, охватные, экспертные)` },
+    "p3.s1.i2": { kz: `Түсірілім (видеограф)`, ru: `Съёмка (видеограф)` },
+    "p3.s1.i3": { kz: `Монтаж (кәсіби)`, ru: `Монтаж (профессиональный)` },
+    "p3.s1.i4": { kz: `Студия (кәсіби), 2 рет`, ru: `Студия (профессиональная), 2 раза` },
+    "p3.s2.label": { kz: `Контент форматтары`, ru: `Форматы контента` },
+    "p3.s2.i1": { kz: `10 охватты`, ru: `10 охватных` },
+    "p3.s2.i2": { kz: `5 эксперттік`, ru: `5 экспертных` },
+    "p3.s2.i3": { kz: `5 карусель-пост`, ru: `5 карусель-постов` },
+    "p3.s3.label": { kz: `Мақсат`, ru: `Цель` },
+    "p3.s3.i1": { kz: `Қамтуды арттыру`, ru: `Увеличить охваты` },
+    "p3.s3.i2": { kz: `Мақсатты аудиторияны тарту`, ru: `Привлечь целевую аудиторию` },
+    "p3.s3.i3": { kz: `Лидтерді сатылымға дайындау`, ru: `Прогреть лиды для продаж` },
+    "p4.s1.label": { kz: `Кімдерге арналған?`, ru: `Кому подходит?` },
+    "p4.s1.i1": { kz: `Өз өтінімін шығарғысы келетін эксперттерге`, ru: `Экспертам, которые хотят запустить свой оффер` },
+    "p4.s1.i2": { kz: `Сатылымы тұрақсыз, бірақ масштабқа шығуды қалайтындарға`, ru: `Тем, у кого нестабильные продажи, но есть желание выйти на масштаб` },
+    "p4.s1.i3": { kz: `Запуск жасағысы келеді, бірақ неден бастарын білмейтіндерге`, ru: `Тем, кто хочет сделать запуск, но не знает, с чего начать` },
+    "p4.s1.i4": { kz: `СММ, мобилограф, рилсмейкер болып жүріп, келесі деңгейге шыға алмай жүрген мамандарға`, ru: `SMM-специалистам, мобилографам, рилсмейкерам, которые не могут перейти на следующий уровень` },
+    "p4.s1.i5": { kz: `Бизнесіне дайын маркетинг стратегия алғысы келетіндерге`, ru: `Тем, кто хочет получить готовую маркетинговую стратегию для бизнеса` },
+    "p4.s2.label": { kz: `Консультацияда не жасаймыз?`, ru: `Что делаем на консультации?` },
+    "p4.s2.i1": { kz: `Қазіргі жағдайыңызды толық талдаймын`, ru: `Полностью анализирую вашу текущую ситуацию` },
+    "p4.s2.i2": { kz: `Қай жерде ақша жоғалтып жүргеніңізді көрсетемін`, ru: `Покажу, где вы теряете деньги` },
+    "p4.s2.i3": { kz: `Сіздің нишаңызға сай өнімдер құрастырамыз`, ru: `Составим продукты, подходящие под вашу нишу` },
+    "p4.s2.i4": { kz: `Клиент әкелетін трафик көздерін анықтаймыз`, ru: `Определим источники трафика, которые приводят клиентов` },
+    "p4.s2.i5": { kz: `Контент стратегиясын құрамыз`, ru: `Построим контент-стратегию` },
+    "p4.s2.i6": { kz: `Қандай воронка тиімді болатынын көрсетемін`, ru: `Покажу, какая воронка будет эффективной` },
+    "p4.s2.i7": { kz: `Прогрев пен сатылым схемасын беремін`, ru: `Дам схему прогрева и продаж` },
+    "p4.s2.i8": { kz: `Масштабқа шығудың нақты жол картасын жасаймыз`, ru: `Составим конкретную дорожную карту выхода на масштаб` },
+    "p4.s3.label": { kz: `Нәтижесі`, ru: `Результат` },
+    "p4.s3.i1": { kz: `Не істеу керегін нақты түсінеміз`, ru: `Точно поймёте, что делать` },
+    "p4.s3.i2": { kz: `Өзіңізге сай стратегиямен шығасыз`, ru: `Выйдете со стратегией, подходящей именно вам` },
+    "p4.s3.i3": { kz: `Табысты өсіруге арналған нақты жоспар аласыз`, ru: `Получите конкретный план для роста дохода` },
+    "p4.s3.i4": { kz: `Консультациядан кейін бірден іске асыратын әрекеттер тізімі болады`, ru: `После консультации у вас будет список действий, которые можно применить сразу` },
+    "sec5.note": { kz: `Бұл жай ғана теория емес. <strong>Біз бірге жасап шығамыз.</strong> Менің мақсатым — сізге ақпарат беру емес, нәтиже шығару.`, ru: `Это не просто теория. <strong>Мы создаём это вместе.</strong> Моя цель — не дать вам информацию, а дать результат.` },
+    "sec6.title": { kz: `Мен туралы қысқаша`, ru: `Коротко о себе` },
+    "about.role": { kz: `Маркетинг-консультант`, ru: `Маркетинг-консультант` },
+    "about.bio": { kz: `Маған 25 жас. Маркетинг саласында 5 жылдан асты жұмыс істеп келемін. Осы жылдар ішінде өз бизнесімді құрдым, тұрақты табыс жүйесін қалыптастырдым және жеке көлігіме қол жеткіздім. Бұл — сандар емес, дәл сол жүйенің нәтижесі, соны мен сізбен бөлісемін.`, ru: `Мне 25 лет. Больше 5 лет я работаю в маркетинге. За это время построила собственный бизнес, выстроила систему стабильного дохода и приобрела свой автомобиль. Это не просто цифры — это результат той самой системы, которой я делюсь с вами.` },
+    "about.badge1": { kz: `25 жас`, ru: `25 лет` },
+    "about.badge2": { kz: `5+ жыл тәжірибе`, ru: `5+ лет опыта` },
+    "about.badge3": { kz: `Меншік бизнес`, ru: `Свой бизнес` },
+    "about.badge4": { kz: `Жеке көлік`, ru: `Свой автомобиль` },
+    "sec7.title": { kz: `Неге маған сенеді?`, ru: `Почему мне доверяют?` },
+    "trust1": { kz: `Теория емес — практика`, ru: `Не теория — практика` },
+    "trust2": { kz: `Дайын шаблон емес`, ru: `Не готовый шаблон` },
+    "trust3": { kz: `Нақты жүйе`, ru: `Реальная система` },
+    "trust4": { kz: `Толық сүйемелдеу`, ru: `Полное сопровождение` },
+    "trust5": { kz: `Нәтижеге бағытталған жұмыс`, ru: `Работа, направленная на результат` },
+    "final.h2": { kz: `Егер сіз де тұрақты сатылым жүйесін құрып, <em>масштабқа шыққыңыз келсе</em> — маған жазыңыз.`, ru: `Если вы тоже хотите построить систему постоянных продаж и <em>выйти на масштаб</em> — напишите мне.` },
+    "footer": { kz: `TokiFrauzent · Тоғжан Алтынбек © 2026`, ru: `TokiFrauzent · Тоғжан Алтынбек © 2026` }
+  };
+
+  function setLang(lang){
+    currentLang = lang;
+    document.getElementById('btn-kz').classList.toggle('active', lang === 'kz');
+    document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (T[key] && T[key][lang]) el.innerHTML = T[key][lang];
+    });
+  }
+</script>
+</body>
+</html>
